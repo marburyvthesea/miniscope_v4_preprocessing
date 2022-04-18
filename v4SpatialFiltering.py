@@ -18,7 +18,7 @@ from scipy.signal import butter, lfilter, freqz, filtfilt
 
 # apply FFT and lowpass filtering 
 
-def generateMeanFFT(fileNum, dataDir, dataFilePrefix):
+def generateMeanFFT(fileNum, dataDir, dataFilePrefix, framesPerFile):
     # Makes sure path ends with '/'
     if (dataDir[-1] is not "/"):
         dataDir = dataDir + "/"
