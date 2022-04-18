@@ -19,6 +19,14 @@ from scipy.signal import butter, lfilter, freqz, filtfilt
 # apply FFT and lowpass filtering 
 
 def generateMeanFFT(fileNum, dataDir, dataFilePrefix):
+    
+    frameStep = 10 # Can use frame skipping to speed this up
+    showVideo = False
+    sumFFT = None
+    applyVignette = True
+    vignetteCreated = False
+    running = True
+
     while (path.exists(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum)) and running is True):
         cap = cv2.VideoCapture(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))
         fileNum = fileNum + 1
