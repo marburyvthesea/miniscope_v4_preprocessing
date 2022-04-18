@@ -135,12 +135,16 @@ def applyFFTLowpassFiltering(dataDir, dataFilePrefix, startingFileNum, cutoffHz,
 
     mode = 'save'
     frameStep = 1
-    compressionCodec = "GREY"
+    #compressionCodec = "GREY"
 
     fileNum = startingFileNum
     sumFFT = None
     frameCount = 0
     running = True
+
+    # Makes sure path ends with '/'
+    if (dataDir[-1] is not "/"):
+        dataDir = dataDir + "/"
 
     if (mode is "save" and frameStep is not 1):
         print("WARNING: You are only saving every {} frame!".format(frameStep))
