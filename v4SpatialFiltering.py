@@ -87,6 +87,10 @@ def generateFFTMask(sumFFT, goodRadius, notchHalfWidth, centerHalfHeightToLeave,
 
 
 def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum, maskFFT):
+    # Makes sure path ends with '/'
+    if (dataDir[-1] is not "/"):
+        dataDir = dataDir + "/"
+
     frameStep = 1
     sumFFT = None
     meanFrameList = []
