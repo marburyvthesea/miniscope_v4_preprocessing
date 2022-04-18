@@ -19,7 +19,11 @@ from scipy.signal import butter, lfilter, freqz, filtfilt
 # apply FFT and lowpass filtering 
 
 def generateMeanFFT(fileNum, dataDir, dataFilePrefix):
-    
+    # Makes sure path ends with '/'
+    if (dataDir[-1] is not "/"):
+        dataDir = dataDir + "/"
+
+
     frameStep = 10 # Can use frame skipping to speed this up
     showVideo = False
     sumFFT = None
