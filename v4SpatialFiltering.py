@@ -13,7 +13,7 @@ import glob
 from tqdm import tqdm 
 from scipy.signal import butter, lfilter, freqz, filtfilt
 
-
+from multiprocessing import Pool
 
 
 # apply FFT and lowpass filtering 
