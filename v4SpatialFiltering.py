@@ -86,7 +86,7 @@ def generateFFTMask(sumFFT, goodRadius, notchHalfWidth, centerHalfHeightToLeave,
     return(modifiedFFT, maskFFT)
 
 
-def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum):
+def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum, maskFFT):
     frameStep = 1
     sumFFT = None
     meanFrameList = []
