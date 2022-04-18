@@ -90,6 +90,7 @@ def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum):
     frameStep = 1
     sumFFT = None
     meanFrameList = []
+    fileNum = startingFileNum
 
     while (path.exists(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))):
         cap = cv2.VideoCapture(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))
