@@ -20,38 +20,38 @@ from scipy.signal import butter, lfilter, freqz, filtfilt
 
 def generateMeanFFT(fileNum, dataDir, dataFilePrefix):
     while (path.exists(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum)) and running is True):
-    cap = cv2.VideoCapture(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))
-    fileNum = fileNum + 1
-    frameNum = 0
-    for frameNum in tqdm(range(0,framesPerFile, frameStep), total = framesPerFile/frameStep, desc ="Running file {:.0f}.avi".format(fileNum - 1)):
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frameNum)
-        ret, frame = cap.read()
+        cap = cv2.VideoCapture(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))
+        fileNum = fileNum + 1
+        frameNum = 0
+        for frameNum in tqdm(range(0,framesPerFile, frameStep), total = framesPerFile/frameStep, desc ="Running file {:.0f}.avi".format(fileNum - 1)):
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frameNum)
+            ret, frame = cap.read()
 
-        if (vignetteCreated is False):
-            rows, cols = frame.shape[:2] 
-            X_resultant_kernel = cv2.getGaussianKernel(cols,cols/4) 
-            Y_resultant_kernel = cv2.getGaussianKernel(rows,rows/4) 
-            resultant_kernel = Y_resultant_kernel * X_resultant_kernel.T 
-            mask = 255 * resultant_kernel / np.linalg.norm(resultant_kernel)
-            vignetteCreated = True
+            if (vignetteCreated is False):
+                rows, cols = frame.shape[:2] 
+                X_resultant_kernel = cv2.getGaussianKernel(cols,cols/4) 
+                Y_resultant_kernel = cv2.getGaussianKernel(rows,rows/4) 
+                resultant_kernel = Y_resultant_kernel * X_resultant_kernel.T 
+                mask = 255 * resultant_kernel / np.linalg.norm(resultant_kernel)
+                vignetteCreated = True
 
-        if applyVignette is False:
-            mask = mask * 0 + 1
+            if applyVignette is False:
+                mask = mask * 0 + 1
         
-        if (ret is False):
-            break
-        else:
-            frame = frame[:,:,1] * mask
+            if (ret is False):
+                break
+            else:
+                frame = frame[:,:,1] * mask
             
-            dft = cv2.dft(np.float32(frame),flags = cv2.DFT_COMPLEX_OUTPUT)
-            dft_shift = np.fft.fftshift(dft)
+                dft = cv2.dft(np.float32(frame),flags = cv2.DFT_COMPLEX_OUTPUT)
+                dft_shift = np.fft.fftshift(dft)
             
-            # sum FFT variable iteratively modfied here 
+                # sum FFT variable iteratively modfied here 
             
-            try:
-                sumFFT = sumFFT + cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1])
-            except:
-                sumFFT = cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1])
+                try:
+                    sumFFT = sumFFT + cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1])
+                except:
+                    sumFFT = cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1])
 
     return(sumFFT)
 
@@ -71,7 +71,7 @@ def generateFFTMask(goodRadius, notchHalfWidth, centerHalfHeightToLeave):
 
     modifiedFFT = sumFFT * maskFFT[:,:,0]
 
-    return(modifiedFFT)
+    return(modifiedFFT, maskFFT)
 
 
 def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum)
