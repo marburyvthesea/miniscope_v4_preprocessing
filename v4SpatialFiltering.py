@@ -116,7 +116,7 @@ def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum):
     meanFrame = np.array(meanFrameList)
     return(meanFrame)
 
-def lowpassFilterMeanFluorescence(butterOrder, cutoff, fs):
+def lowpassFilterMeanFluorescence(meanFrame, butterOrder, cutoff, fs):
     
     b, a = butter(butterOrder, cutoff/ (0.5 * fs), btype='low', analog = False)
     meanFiltered = filtfilt(b,a,meanFrame)
