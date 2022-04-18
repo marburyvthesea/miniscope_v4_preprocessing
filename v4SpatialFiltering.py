@@ -86,7 +86,7 @@ def generateFFTMask(sumFFT, goodRadius, notchHalfWidth, centerHalfHeightToLeave,
     return(modifiedFFT, maskFFT)
 
 
-def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum, maskFFT):
+def calculateMeanFluorescencePerFrame(dataDir, dataFilePrefix, startingFileNum, maskFFT, framesPerFile):
     # Makes sure path ends with '/'
     if (dataDir[-1] is not "/"):
         dataDir = dataDir + "/"
