@@ -70,7 +70,7 @@ def generateMeanFFT(fileNum, dataDir, dataFilePrefix, framesPerFile):
 
 
 
-def generateFFTMask(goodRadius, notchHalfWidth, centerHalfHeightToLeave, rows, cols):
+def generateFFTMask(sumFFT, goodRadius, notchHalfWidth, centerHalfHeightToLeave, rows, cols):
 
     crow,ccol = int(rows/2) , int(cols/2)
     maskFFT = np.zeros((rows,cols,2), np.float32)
