@@ -65,12 +65,12 @@ def generateMeanFFT(fileNum, dataDir, dataFilePrefix, framesPerFile):
                 except:
                     sumFFT = cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1])
 
-    return(sumFFT)
+    return(sumFFT, rows, cols)
 
 
 
 
-def generateFFTMask(goodRadius, notchHalfWidth, centerHalfHeightToLeave):
+def generateFFTMask(goodRadius, notchHalfWidth, centerHalfHeightToLeave, rows, cols):
 
     crow,ccol = int(rows/2) , int(cols/2)
     maskFFT = np.zeros((rows,cols,2), np.float32)
