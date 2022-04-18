@@ -128,7 +128,7 @@ def lowpassFilterMeanFluorescence(meanFrame, butterOrder, cutoff, fs):
     return(meanFiltered)
 
 
-def applyFFTLowpassFiltering(dataDir, dataFilePrefix, startingFileNum, cutoffHz, compressionCodec, meanFiltered, maskFFT, rows, cols):
+def applyFFTLowpassFiltering(dataDir, dataFilePrefix, startingFileNum, cutoffHz, compressionCodec, meanFiltered, maskFFT, rows, cols, framesPerFile):
     #Inputs: pass dataDir, dataFilePrefix, startingFileNum, cutoffHz, 
     #   compressionCodec from command line
     #   meanFiltered from lowpass filtering fn 
