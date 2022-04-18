@@ -112,57 +112,57 @@ def lowpassFilterMeanFluorescence(butterOrder, cutoff, fs):
 
 
 def applyFFTLowpassFiltering(dataDir, dataFilePrefix, startingFileNum, cutoffHz, compressionCodec, meanFiltered):
-	#Inputs: pass dataDir, dataFilePrefix, startingFileNum, cutoffHz, 
-	#		 compressionCodec from command line
-	# 		 meanFiltered from lowpass filtering fn 
+    #Inputs: pass dataDir, dataFilePrefix, startingFileNum, cutoffHz, 
+    #   compressionCodec from command line
+    #   meanFiltered from lowpass filtering fn 
 
     mode = 'save'
     frameStep = 1
     compressionCodec = "GREY"
 
-	fileNum = startingFileNum
-	sumFFT = None
-	frameCount = 0
-	running = True
+    fileNum = startingFileNum
+    sumFFT = None
+    frameCount = 0
+    running = True
 
-	if (mode is "save" and frameStep is not 1):
-    	print("WARNING: You are only saving every {} frame!".format(frameStep))
+    if (mode is "save" and frameStep is not 1):
+        print("WARNING: You are only saving every {} frame!".format(frameStep))
 
     codec = cv2.VideoWriter_fourcc(compressionCodec[0],compressionCodec[1],compressionCodec[2],compressionCodec[3])
 
     if (mode is "save" and not path.exists(dataDir + "Denoised")):
-    	os.mkdir(dataDir + "Denoised")
+        os.mkdir(dataDir + "Denoised")
 
     while (path.exists(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum)) and running is True):
-    	cap = cv2.VideoCapture(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))
+        cap = cv2.VideoCapture(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum))
 
-    	if (mode is "save"):
-        	writeFile = cv2.VideoWriter(dataDir + "Denoised/" + dataFilePrefix + "denoised{:.0f}.avi".format(fileNum),  
+        if (mode is "save"):
+            writeFile = cv2.VideoWriter(dataDir + "Denoised/" + dataFilePrefix + "denoised{:.0f}.avi".format(fileNum),  
                             codec, 60, (cols,rows), isColor=False) 
 
         fileNum = fileNum + 1
 
         for frameNum in tqdm(range(0,framesPerFile, frameStep), total = framesPerFile/frameStep, desc ="Running file {:.0f}.avi".format(fileNum - 1)):
-        	cap.set(cv2.CAP_PROP_POS_FRAMES, frameNum)
-        	ret, frame = cap.read()
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frameNum)
+            ret, frame = cap.read()
 
-        	if (ret is False):
-            	break
+            if (ret is False):
+                break
 
             else: 
-            	frame = frame[:,:,1]
-            	dft = cv2.dft(np.float32(frame),flags = cv2.DFT_COMPLEX_OUTPUT|cv2.DFT_SCALE)
-            	dft_shift = np.fft.fftshift(dft)
+                frame = frame[:,:,1]
+                dft = cv2.dft(np.float32(frame),flags = cv2.DFT_COMPLEX_OUTPUT|cv2.DFT_SCALE)
+                dft_shift = np.fft.fftshift(dft)
              
-            	fshift = dft_shift * maskFFT
-            	f_ishift = np.fft.ifftshift(fshift)
-            	img_back = cv2.idft(f_ishift)
-            	img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
+                fshift = dft_shift * maskFFT
+                f_ishift = np.fft.ifftshift(fshift)
+                img_back = cv2.idft(f_ishift)
+                img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
 
-            	meanF = img_back.mean()
-            	img_back = img_back * (1 + (meanFiltered[frameCount] - meanF)/meanF)
-            	img_back[img_back >255] = 255
-            	img_back = np.uint8(img_back)
+                meanF = img_back.mean()
+                img_back = img_back * (1 + (meanFiltered[frameCount] - meanF)/meanF)
+                img_back[img_back >255] = 255
+                img_back = np.uint8(img_back)
 
             if (mode is "save"):
                 writeFile.write(img_back)
@@ -182,14 +182,14 @@ def applyFFTLowpassFiltering(dataDir, dataFilePrefix, startingFileNum, cutoffHz,
 
             frameCount = frameCount + 1
 
-	if (mode is "save"):
-		writeFile.release()
+    if (mode is "save"):
+        writeFile.release()
 
-cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
 
-dirOutput = dataDir + "Denoised"
+    dirOutput = dataDir + "Denoised"
 
-return(dirOutput)
+    return(dirOutput)
 
 
 
