@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "v4PreProcessingScript.py", line 11, in <module>
+    startingFileNum = sys.argv[3]
+IndexError: list index out of range
+finished preprocessing

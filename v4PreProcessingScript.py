@@ -7,8 +7,8 @@ import v4SpatialFiltering
 
 
 dataDir = sys.argv[1]
-dataFilePrefix = sys.argv[2]
-startingFileNum = sys.argv[3]
+dataFilePrefix = ''
+startingFileNum = int(sys.argv[2])
 framesPerFile = 1000
 
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH -A p30771
-#SBATCH -p normal
-#SBATCH -t 12:00:00
-#SBATCH -o /home/jma819/caiman_quest/demos/notebooks/caiman_analysis/logfiles/slurm.%x-%j.out # STDOUT
-#SBATCH --job-name="slurm_normcorr"
+#SBATCH -p short
+#SBATCH -t 04:00:00
+#SBATCH -o /home/jma819/miniscope/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
+#SBATCH --job-name="slurm_v4_preprocessing"
 #SBATCH -N 1
 #SBATCH -n 8
 #SBATCH --mem=20G
@@ -27,11 +27,11 @@ cd /home/jma819/miniscope/miniscope_v4_preprocessing
 #get inputs from command line and run 
 
 INPUT_dataDir=$1
-INPUT_dataFilePrefix=$2
-INPUT_startingFileNum=$3
+#INPUT_dataFilePrefix=$2
+INPUT_startingFileNum=$2
 #framesPerFile=1000
 
 
-python v4PreProcessingScript $INPUT_dataDir $INPUT_dataFilePrefix $INPUT_startingFileNum
+python v4PreProcessingScript.py $INPUT_dataDir $INPUT_startingFileNum
 
 echo "finished preprocessing"

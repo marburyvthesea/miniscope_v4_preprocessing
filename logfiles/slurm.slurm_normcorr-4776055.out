@@ -1,0 +1,8 @@
+generating mean FFT
+Traceback (most recent call last):
+  File "v4PreProcessingScript.py", line 17, in <module>
+    meanFFT, rows, cols = v4SpatialFiltering.generateMeanFFT(startingFileNum, dataDir, dataFilePrefix, framesPerFile)
+  File "/home/jma819/miniscope/miniscope_v4_preprocessing/v4SpatialFiltering.py", line 34, in generateMeanFFT
+    while (path.exists(dataDir + dataFilePrefix + "{:.0f}.avi".format(fileNum)) and running is True):
+ValueError: Unknown format code 'f' for object of type 'str'
+finished preprocessing
