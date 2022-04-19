@@ -4,7 +4,10 @@ import sys
 sys.path.append('/home/jma819/miniscope/miniscope_v4_preprocessing')
 import v4SpatialFiltering
 from matplotlib import pyplot as plt
-
+import numpy as np
+import imageio
+import os
+from tqdm import tqdm
 
 dataDir = sys.argv[1]
 dataFilePrefix = ''
@@ -48,4 +51,28 @@ dirOutput = v4SpatialFiltering.applyFFTLowpassFiltering(dataDir, dataFilePrefix,
 print('saved denoised images to:')
 print(dirOutput)
 
-#TO DO: save some examples of FFT/filtered FFT, lowpass filtering examples from datasets 
+# convert to tif and save images 
+
+print('converting to tiffs')
+avi_files_to_convert = [dirOutput+'/'+fname for fname in os.listdir(dirOutput) if 'avi' in fname]
+for path_to_video in tqdm(avi_files_to_convert):
+	savepath = path_to_video.strip('.avi')+'.tif'
+	try:
+		video_loaded=imageio.get_reader(path_to_video)
+		imageio.mimwrite(savepath, video_loaded)
+
+	except OSError:
+		print('error in:'+path_to_video)
+		pass
+
+print('converted to tiffs')
+
+
+
+
+
+
+
+
+
+
