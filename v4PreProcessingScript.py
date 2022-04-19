@@ -3,7 +3,7 @@
 import sys 
 sys.path.append('/home/jma819/miniscope/miniscope_v4_preprocessing')
 import v4SpatialFiltering
-
+from matplotlib import pyplot as plt
 
 
 dataDir = sys.argv[1]
