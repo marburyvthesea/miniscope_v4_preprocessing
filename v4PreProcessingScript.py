@@ -57,6 +57,7 @@ print('converting to tiffs')
 avi_files_to_convert = [dirOutput+'/'+fname for fname in os.listdir(dirOutput) if 'avi' in fname]
 for path_to_video in tqdm(avi_files_to_convert):
 	savepath = path_to_video.strip('.avi')+'.tif'
+	#savepath = '/'.join(path_to_video.split('/')[0:-1])+'/denoised_'+path_to_video.split('/')[-1].strip('.avi')+'.tif'
 	try:
 		video_loaded=imageio.get_reader(path_to_video)
 		imageio.mimwrite(savepath, video_loaded)
