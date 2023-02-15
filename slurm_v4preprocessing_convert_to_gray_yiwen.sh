@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH -A p30771
+#SBATCH -A p31904
 #SBATCH -p normal
 #SBATCH -t 12:00:00
-#SBATCH -o /home/jma819/miniscope_denoising/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
+#SBATCH -o /home/yzh336/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
 #SBATCH --job-name="slurm_v4_preprocessing"
 #SBATCH -N 1
 #SBATCH -n 8
@@ -11,7 +11,7 @@
 module purge all
 cd ~
 #add project directory to PATH
-export PATH=$PATH/projects/p30771/
+export PATH=$PATH/projects/p31904/
 
 #load modules to use
 module load python/anaconda3.6 
@@ -22,7 +22,7 @@ source activate v4_preprocessing
 
 #need to cd to module directory
 
-cd /home/jma819/miniscope_denoising/miniscope_v4_preprocessing
+cd /home/yzh336/miniscope_v4_preprocessing
 
 #get inputs from command line and run 
 
@@ -42,14 +42,14 @@ echo "converting to gray"
 module purge all 
 module load matlab/r2018a
 #cd to script directory
-cd /projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe
 
 
 
 
 
 
-matlab -nosplash -nodesktop -r "dirpath=strcat('$INPUT_dataDir','Denoised/');movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('/projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe/multiTiffsToGrayDirectory.m');exit;"
+
+matlab -nosplash -nodesktop -r "dirpath=strcat('$INPUT_dataDir','Denoised/');movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('multiTiffsToGrayDirectory.m');exit;"
 
 cd $INPUT_dataDir
 cd Denoised
