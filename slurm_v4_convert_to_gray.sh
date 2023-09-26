@@ -13,16 +13,6 @@ cd ~
 #add project directory to PATH
 export PATH=$PATH/projects/p30771/
 
-#load modules to use
-module load python/anaconda3.6 
-
-#need to cd to load conda environment
-
-source activate v4_preprocessing
-
-#need to cd to module directory
-
-cd /home/jma819/miniscope_denoising/miniscope_v4_preprocessing
 
 #get inputs from command line and run 
 
@@ -34,11 +24,9 @@ INPUT_movieend=$3
 INPUT_regExp='denoised'
 INPUT_parallel_enable=true
 
-echo "starting preprocessing"
 
-python v4PreProcessingScript.py $INPUT_dataDir $INPUT_startingFileNum
 
-echo "finished preprocessing"
+
 echo "converting to gray"
 
 module purge all 
@@ -47,10 +35,14 @@ module load matlab/r2018a
 cd /projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe
 
 
-matlab -nosplash -nodesktop -r "dirpath=strcat('$INPUT_dataDir','Denoised/');movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('/projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe/multiTiffsToGrayDirectory.m');exit;"
+
+
+
+
+matlab -nosplash -nodesktop -r "dirpath='$INPUT_dataDir';movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('/projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe/multiTiffsToGrayDirectory.m');exit;"
 
 cd $INPUT_dataDir
-cd Denoised
+
 
 mkdir gray
 mv *converted.tif gray

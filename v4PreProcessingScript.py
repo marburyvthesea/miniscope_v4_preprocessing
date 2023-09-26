@@ -24,12 +24,12 @@ print('generating FFT mask')
 modifiedFFT, maskFFT = v4SpatialFiltering.generateFFTMask(meanFFT, 2000, 3, 20, rows, cols)
 
 # save image of fft transform eg
-plt.figure()
-plt.subplot(121),plt.imshow(np.log(meanFFT), cmap = 'gray')
-plt.title('Mean FFT of Data')
-plt.subplot(122),plt.imshow(np.log(modifiedFFT), cmap = 'gray')
-plt.title('Filtered FFT')
-plt.savefig(dataDir+"/denoised_"+str(startingFileNum)+"_fft_filter.svg")
+#plt.figure()
+#plt.subplot(121),plt.imshow(np.log(meanFFT), cmap = 'gray')
+#plt.title('Mean FFT of Data')
+#plt.subplot(122),plt.imshow(np.log(modifiedFFT), cmap = 'gray')
+#plt.title('Filtered FFT')
+#plt.savefig(dataDir+"/denoised_"+str(startingFileNum)+"_fft_filter.svg")
 
 #3 get mean fluorescence per frame
 print('generating mean fluorescence per frame')
