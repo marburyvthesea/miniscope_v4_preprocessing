@@ -11,7 +11,8 @@
 module purge all
 cd ~
 #add project directory to PATH
-export PATH=$PATH/projects/p30771/
+export PATH=$PATH/projects/p32501
+export PATH=$PATH/projects/p30771
 
 #load modules to use
 module load python/anaconda3.6 
