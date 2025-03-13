@@ -2,7 +2,7 @@
 #SBATCH -A p32501
 #SBATCH -p normal
 #SBATCH -t 12:00:00
-#SBATCH -o /home/jma819/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
+#SBATCH -o /home/jma819/miniscope_denoising/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
 #SBATCH --job-name="slurm_v4_preprocessing"
 #SBATCH -N 1
 #SBATCH -n 8
