@@ -21,7 +21,8 @@ if parallel == true
 
     parfor x = movie_start:movie_end
 	disp(x);	
-        convertMultiTiffToGrayFn(strcat(dirpath, regExp, num2str(x), '.tif'));
+        img_path = fullfile(dirpath, sprintf('%s%d.tif', regExp, x));
+        convertMultiTiffToGrayFn(img_path);
     end
     
 else
@@ -30,8 +31,8 @@ else
 
     for x = movie_start:movie_end
 	disp(x);
-        convertMultiTiffToGrayFn(strcat(dirpath, regExp, num2str(x), '.tif'));
+        img_path = fullfile(dirpath, sprintf('%s%d.tif', regExp, x));
+        convertMultiTiffToGrayFn(img_path);
 
     end    
 end
-
