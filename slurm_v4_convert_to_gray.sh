@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH -A p30771
-#SBATCH -p normal
-#SBATCH -t 12:00:00
+#SBATCH -p short
+#SBATCH -t 04:00:00
 #SBATCH -o /home/jma819/miniscope_denoising/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
-#SBATCH --job-name="slurm_v4_preprocessing"
+#SBATCH --job-name="slurm_v4_converttogray"
 #SBATCH -N 1
-#SBATCH -n 8
-#SBATCH --mem=20G
+#SBATCH -n 4
+#SBATCH --mem=25G
 
 module purge all
 cd ~
@@ -32,14 +32,9 @@ echo "converting to gray"
 module purge all 
 module load matlab/r2018a
 #cd to script directory
-cd /projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe
 
 
-
-
-
-
-matlab -nosplash -nodesktop -r "dirpath='$INPUT_dataDir';movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('/projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe/multiTiffsToGrayDirectory.m');exit;"
+matlab -nosplash -nodesktop -r "dirpath='$INPUT_dataDir';movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('/home/jma819/miniscope_denoising/miniscope_v4_preprocessing/multiTiffsToGrayDirectory.m');exit;"
 
 cd $INPUT_dataDir
 

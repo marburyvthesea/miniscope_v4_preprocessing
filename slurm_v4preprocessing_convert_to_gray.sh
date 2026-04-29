@@ -5,8 +5,8 @@
 #SBATCH -o /home/jma819/miniscope_denoising/miniscope_v4_preprocessing/logfiles/slurm.%x-%j.out # STDOUT
 #SBATCH --job-name="slurm_v4_preprocessing"
 #SBATCH -N 1
-#SBATCH -n 8
-#SBATCH --mem=20G
+#SBATCH -n 4
+#SBATCH --mem=25G
 
 module purge all
 cd ~
@@ -15,7 +15,7 @@ export PATH=$PATH/projects/p32501
 export PATH=$PATH/projects/p30771
 
 #load modules to use
-module load python/anaconda3.6 
+module load python/anaconda3
 
 #need to cd to load conda environment
 
