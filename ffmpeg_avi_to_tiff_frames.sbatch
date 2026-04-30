@@ -19,7 +19,8 @@ Usage:
 
 Description:
   Convert every numeric .avi file in INPUT_DIR into one grayscale multi-page
-  TIFF using ffmpeg. Output is written as:
+  TIFF. ffmpeg decodes frames and Python+tifffile writes the TIFF stack.
+  Output is written as:
 
     OUTPUT_DIR/<avi_stem>.tif
 
@@ -60,6 +61,7 @@ fi
 
 module purge
 module load ffmpeg/6.1
+module load python/anaconda3
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -79,6 +81,105 @@ echo "OUTPUT_DIR=$OUTPUT_DIR"
 echo "WORKERS=$WORKERS"
 echo "AVI_COUNT=${#avi_files[@]}"
 
+PY_HELPER="$(mktemp /tmp/avi_to_tiff_XXXXXX.py)"
+cleanup() {
+  rm -f "$PY_HELPER"
+}
+trap cleanup EXIT
+
+cat > "$PY_HELPER" <<'PYEOF'
+import json
+import os
+import subprocess
+import sys
+
+import numpy as np
+import tifffile
+
+
+def probe_video(path: str) -> tuple[int, int]:
+    cmd = [
+        "ffprobe",
+        "-v",
+        "error",
+        "-select_streams",
+        "v:0",
+        "-show_entries",
+        "stream=width,height",
+        "-of",
+        "json",
+        path,
+    ]
+    result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+    info = json.loads(result.stdout)
+    streams = info.get("streams", [])
+    if not streams:
+        raise RuntimeError(f"No video stream found in {path}")
+    width = int(streams[0]["width"])
+    height = int(streams[0]["height"])
+    return width, height
+
+
+def convert_one(in_path: str, out_path: str) -> None:
+    width, height = probe_video(in_path)
+    frame_bytes = width * height
+    ffmpeg_cmd = [
+        "ffmpeg",
+        "-v",
+        "error",
+        "-i",
+        in_path,
+        "-f",
+        "rawvideo",
+        "-pix_fmt",
+        "gray",
+        "-",
+    ]
+
+    proc = subprocess.Popen(ffmpeg_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    frame_count = 0
+
+    try:
+        with tifffile.TiffWriter(out_path, bigtiff=True) as tif:
+            while True:
+                chunk = proc.stdout.read(frame_bytes)
+                if not chunk:
+                    break
+                if len(chunk) != frame_bytes:
+                    raise RuntimeError(
+                        f"Incomplete frame while reading {in_path}: "
+                        f"expected {frame_bytes} bytes, got {len(chunk)}"
+                    )
+                frame = np.frombuffer(chunk, dtype=np.uint8).reshape((height, width))
+                tif.write(frame, photometric="minisblack")
+                frame_count += 1
+    except Exception:
+        proc.kill()
+        proc.wait()
+        if os.path.exists(out_path):
+            os.remove(out_path)
+        raise
+
+    stderr_text = proc.stderr.read().decode("utf-8", errors="replace")
+    return_code = proc.wait()
+    if return_code != 0:
+        if os.path.exists(out_path):
+            os.remove(out_path)
+        raise RuntimeError(f"ffmpeg failed for {in_path}:\n{stderr_text}")
+    if frame_count == 0:
+        if os.path.exists(out_path):
+            os.remove(out_path)
+        raise RuntimeError(f"No frames were decoded from {in_path}")
+
+    print(f"Wrote {frame_count} frame(s) to {out_path}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        raise SystemExit("Usage: python avi_to_tiff.py INPUT_AVI OUTPUT_TIF")
+    convert_one(sys.argv[1], sys.argv[2])
+PYEOF
+
 convert_one() {
   local avi_path="$1"
   local avi_name avi_stem out_path
@@ -88,10 +189,7 @@ convert_one() {
   out_path="${OUTPUT_DIR}/${avi_stem}.tif"
   echo "Converting $avi_name -> $out_path"
 
-  ffmpeg -v error -y \
-    -i "$avi_path" \
-    -pix_fmt gray \
-    "$out_path"
+  python "$PY_HELPER" "$avi_path" "$out_path"
 }
 
 running=0
