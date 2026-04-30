@@ -20,8 +20,10 @@ export PATH=$PATH/projects/p30771
 module load python/anaconda3
 
 #need to cd to load conda environment
-
-source activate v4_preprocessing
+set +u
+eval "$(conda shell.bash hook)"
+conda activate v4_preprocessing
+set -u 
 
 #need to cd to module directory
 
