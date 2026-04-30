@@ -97,7 +97,7 @@ import numpy as np
 import tifffile
 
 
-def probe_video(path: str) -> tuple[int, int]:
+def probe_video(path):
     cmd = [
         "ffprobe",
         "-v",
@@ -114,13 +114,13 @@ def probe_video(path: str) -> tuple[int, int]:
     info = json.loads(result.stdout)
     streams = info.get("streams", [])
     if not streams:
-        raise RuntimeError(f"No video stream found in {path}")
+        raise RuntimeError("No video stream found in {}".format(path))
     width = int(streams[0]["width"])
     height = int(streams[0]["height"])
     return width, height
 
 
-def convert_one(in_path: str, out_path: str) -> None:
+def convert_one(in_path, out_path):
     width, height = probe_video(in_path)
     frame_bytes = width * height
     ffmpeg_cmd = [
@@ -147,8 +147,9 @@ def convert_one(in_path: str, out_path: str) -> None:
                     break
                 if len(chunk) != frame_bytes:
                     raise RuntimeError(
-                        f"Incomplete frame while reading {in_path}: "
-                        f"expected {frame_bytes} bytes, got {len(chunk)}"
+                        "Incomplete frame while reading {}: expected {} bytes, got {}".format(
+                            in_path, frame_bytes, len(chunk)
+                        )
                     )
                 frame = np.frombuffer(chunk, dtype=np.uint8).reshape((height, width))
                 tif.write(frame, photometric="minisblack")
@@ -165,13 +166,13 @@ def convert_one(in_path: str, out_path: str) -> None:
     if return_code != 0:
         if os.path.exists(out_path):
             os.remove(out_path)
-        raise RuntimeError(f"ffmpeg failed for {in_path}:\n{stderr_text}")
+        raise RuntimeError("ffmpeg failed for {}:\n{}".format(in_path, stderr_text))
     if frame_count == 0:
         if os.path.exists(out_path):
             os.remove(out_path)
-        raise RuntimeError(f"No frames were decoded from {in_path}")
+        raise RuntimeError("No frames were decoded from {}".format(in_path))
 
-    print(f"Wrote {frame_count} frame(s) to {out_path}")
+    print("Wrote {} frame(s) to {}".format(frame_count, out_path))
 
 
 if __name__ == "__main__":
@@ -189,7 +190,7 @@ convert_one() {
   out_path="${OUTPUT_DIR}/${avi_stem}.tif"
   echo "Converting $avi_name -> $out_path"
 
-  python "$PY_HELPER" "$avi_path" "$out_path"
+  python3 "$PY_HELPER" "$avi_path" "$out_path"
 }
 
 running=0
