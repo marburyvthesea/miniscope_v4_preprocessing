@@ -7,8 +7,8 @@
 #SBATCH --mem=16G
 #SBATCH --time=04:00:00
 #SBATCH --job-name=avi_to_tiff
-#SBATCH --output=%x-%j.out
-#SBATCH --error=%x-%j.err
+#SBATCH --output=/home/jma819/miniscope_denoising/miniscope_v4_preprocessing/logfiles/%x-%j.out
+#SBATCH --error=/home/jma819/miniscope_denoising/miniscope_v4_preprocessing/logfiles/%x-%j.err
 
 set -euo pipefail
 
@@ -113,8 +113,8 @@ def probe_video(path):
         "json",
         path,
     ]
-    result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-    info = json.loads(result.stdout)
+    result = subprocess.check_output(cmd)
+    info = json.loads(result.decode("utf-8"))
     streams = info.get("streams", [])
     if not streams:
         raise RuntimeError("No video stream found in {}".format(path))
@@ -155,7 +155,7 @@ def convert_one(in_path, out_path):
                         )
                     )
                 frame = np.frombuffer(chunk, dtype=np.uint8).reshape((height, width))
-                tif.write(frame, photometric="minisblack")
+                tif.save(frame, photometric="minisblack")
                 frame_count += 1
     except Exception:
         proc.kill()
