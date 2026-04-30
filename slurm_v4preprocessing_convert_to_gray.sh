@@ -8,6 +8,8 @@
 #SBATCH -n 4
 #SBATCH --mem=25G
 
+set -euo pipefail
+
 module purge all
 cd ~
 #add project directory to PATH
@@ -34,6 +36,8 @@ INPUT_startingFileNum=$2
 INPUT_movieend=$3
 INPUT_regExp='denoised'
 INPUT_parallel_enable=true
+SCRIPT_DIR="/home/jma819/miniscope_denoising/miniscope_v4_preprocessing"
+GRAY_INPUT_DIR="${INPUT_dataDir%/}/Denoised"
 
 echo "starting preprocessing"
 
@@ -44,28 +48,28 @@ echo "converting to gray"
 
 module purge all 
 module load matlab/r2018a
-#cd to script directory
-cd /projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe
+cd "$SCRIPT_DIR"
 
+matlab -nosplash -nodesktop -r "dirpath='$GRAY_INPUT_DIR';movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('$SCRIPT_DIR/multiTiffsToGrayDirectory.m');exit;"
 
-matlab -nosplash -nodesktop -r "dirpath=strcat('$INPUT_dataDir','Denoised/');movie_start='$INPUT_startingFileNum';movie_end='$INPUT_movieend';regExp='$INPUT_regExp';parallel='$INPUT_parallel_enable';disp(dirpath);run('/projects/p30771/MATLAB/CNMF_E_jjm/quest_MATLAB_cnmfe/multiTiffsToGrayDirectory.m');exit;"
+cd "$GRAY_INPUT_DIR"
 
-cd $INPUT_dataDir
-cd Denoised
+mkdir -p gray
+shopt -s nullglob
+converted_files=( *converted.tif )
+if [[ ${#converted_files[@]} -eq 0 ]]; then
+  echo "ERROR: No converted TIFFs were created in $GRAY_INPUT_DIR" >&2
+  exit 1
+fi
 
-mkdir gray
-mv *converted.tif gray
+mv -- "${converted_files[@]}" gray/
 
 cd gray
 
-mv denoised0_converted.tif denoised00_converted.tif
-mv denoised1_converted.tif denoised01_converted.tif
-mv denoised2_converted.tif denoised02_converted.tif
-mv denoised3_converted.tif denoised03_converted.tif
-mv denoised4_converted.tif denoised04_converted.tif
-mv denoised5_converted.tif denoised05_converted.tif
-mv denoised6_converted.tif denoised06_converted.tif
-mv denoised7_converted.tif denoised07_converted.tif
-mv denoised8_converted.tif denoised08_converted.tif
-mv denoised9_converted.tif denoised09_converted.tif
-
+for n in {0..9}; do
+  src="denoised${n}_converted.tif"
+  dst="denoised0${n}_converted.tif"
+  if [[ -f "$src" ]]; then
+    mv "$src" "$dst"
+  fi
+done
