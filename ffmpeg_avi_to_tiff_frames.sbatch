@@ -62,6 +62,9 @@ fi
 module purge
 module load ffmpeg/6.1
 module load python/anaconda3
+set +u
+source activate v4_preprocessing
+set -u
 
 mkdir -p "$OUTPUT_DIR"
 

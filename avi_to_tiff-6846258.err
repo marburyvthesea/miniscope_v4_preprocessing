@@ -1,0 +1,16 @@
+  File "/tmp/avi_to_tiff_REk928.py", line 27
+    raise RuntimeError(f"No video stream found in {path}")
+                                                        ^
+SyntaxError: invalid syntax
+  File "/tmp/avi_to_tiff_REk928.py", line 27
+    raise RuntimeError(f"No video stream found in {path}")
+                                                        ^
+SyntaxError: invalid syntax
+  File "/tmp/avi_to_tiff_REk928.py", line 27
+    raise RuntimeError(f"No video stream found in {path}")
+                                                        ^
+SyntaxError: invalid syntax
+  File "/tmp/avi_to_tiff_REk928.py", line 27
+    raise RuntimeError(f"No video stream found in {path}")
+                                                        ^
+SyntaxError: invalid syntax

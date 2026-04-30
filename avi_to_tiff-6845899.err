@@ -1,0 +1,12 @@
+[image2 @ 0xa68380] Cannot write more than one file with the same name. Are you missing the -update option or a sequence pattern?
+[vost#0:0/tiff @ 0xa6b100] Error submitting a packet to the muxer: Invalid argument
+[out#0/image2 @ 0xa68240] Error muxing a packet
+[image2 @ 0x16e7380] Cannot write more than one file with the same name. Are you missing the -update option or a sequence pattern?
+[vost#0:0/tiff @ 0x16ea100] Error submitting a packet to the muxer: Invalid argument
+[out#0/image2 @ 0x16e7240] Error muxing a packet
+[image2 @ 0xda3380] Cannot write more than one file with the same name. Are you missing the -update option or a sequence pattern?
+[vost#0:0/tiff @ 0xda6100] Error submitting a packet to the muxer: Invalid argument
+[out#0/image2 @ 0xda3240] Error muxing a packet
+[image2 @ 0xf9c380] Cannot write more than one file with the same name. Are you missing the -update option or a sequence pattern?
+[vost#0:0/tiff @ 0xf9f100] Error submitting a packet to the muxer: Invalid argument
+[out#0/image2 @ 0xf9c240] Error muxing a packet

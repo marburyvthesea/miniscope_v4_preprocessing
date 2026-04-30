@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/tmp/avi_to_tiff_muPppT.py", line 7, in <module>
+    import tifffile
+ImportError: No module named 'tifffile'
+Traceback (most recent call last):
+  File "/tmp/avi_to_tiff_muPppT.py", line 7, in <module>
+    import tifffile
+ImportError: No module named 'tifffile'
+Traceback (most recent call last):
+  File "/tmp/avi_to_tiff_muPppT.py", line 7, in <module>
+    import tifffile
+ImportError: No module named 'tifffile'
+Traceback (most recent call last):
+  File "/tmp/avi_to_tiff_muPppT.py", line 7, in <module>
+    import tifffile
+ImportError: No module named 'tifffile'
